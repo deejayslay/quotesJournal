@@ -103,22 +103,3 @@ def delete_note():
             db.session.delete(note)
             db.session.commit()
     return jsonify({})  # must return something
-
-
-@views.route("/view-note", methods=["POST"])
-def view_note():
-    note = json.loads(request.data)
-    noteId = note["noteId"]
-    note = Note.query.get(noteId)  # look for note that has this note id
-    if note:
-        if note.user_id == current_user.id:  # if note is user's note
-            print(note.quote)
-        note = {
-            "notes": note.notes,
-            "date": note.date,
-            "quote": note.quote,
-            "author": note.quote_author,
-            "category": note.quote_category,
-        }
-    print("monayyyy")
-    return render_template("view_note.html", user=current_user)

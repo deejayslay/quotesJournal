@@ -7,14 +7,3 @@ function deleteNote(noteId) {
     window.location.href = "/";
   });
 }
-
-function viewNote(noteId) {
-  fetch("/view-note", {
-    method: "POST",
-    body: JSON.stringify({ noteId: noteId }),
-  })
-    .then((res) => {
-      res.json();
-    })
-    .then((data) => console.log(data));
-}
