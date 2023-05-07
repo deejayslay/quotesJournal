@@ -2,7 +2,15 @@
 <h1>Notes</h1>
 <ul class="list-group list-group-flush" , id="notes">
   {% for note in user.notes %}
-  <li class="list-group-item">{{ note.data }} {{note.date}}</li>
+  <li class="list-group-item">
+    <div>
+      {{ note.quote }} {{ note.quote_author }} {{ note.quote_category }}
+    </div>
+    <div>{{ note.date }}</div>
+    <button type="button" class="close" onClick="deleteNote({{ note.id }})">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </li>
   {% endfor %}
 </ul>
 <br />
@@ -23,8 +31,18 @@
 {% if n %}
 <h1>New Note</h1>
 <form method="POST">
-  <p>{{ quote }}</p>
-  <textarea name="note" id="note" class="form-control"></textarea>
+  <p>"{{ q["quote"] }}" - {{ q["author"] }}</p>
+  <p>Category: {{ q["category"] }}</p>
+  <input type="hidden" name="quote_text" value="{{ q['quote'] }}" />
+  <input type="hidden" name="quote_author" value="{{ q['author'] }}" />
+  <input type="hidden" name="quote_category" value="{{ q['category'] }}" />
+  <textarea
+    name="note"
+    id="note"
+    class="form-control"
+    rows="20"
+    cols="75"
+  ></textarea>
   <br />
   <div align="center">
     <button type="submit" class="btn btn-primary">Add Note</button>

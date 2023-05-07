@@ -16,18 +16,12 @@ class User(db.Model, UserMixin):
     notes = db.relationship("Note")
 
 
-class Quote(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    quote = db.Column(db.String(500))
-    author = db.Column(db.String(150))
-    category = db.Column(db.String(100))
-
-
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     notes = db.Column(db.String(15000))
     date = db.Column(db.DateTime(timezone=True), default=func.now())
+    quote = db.Column(db.String(500))
+    quote_author = db.Column(db.String(100))
+    quote_category = db.Column(db.String(100))
     # every note has one user associated with it
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-    # likewise, every note has one quote associated with it
-    quote_id = db.Column(db.Integer, db.ForeignKey("quote.id"))

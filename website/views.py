@@ -2,12 +2,15 @@
 creates routes
 """
 
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
 import json
 
 # for API call to Quotes API
 import requests
+
+from .models import Note
+from . import db
 
 
 # use Quotes API to get random quote along with add info about the quote (dict)
@@ -33,21 +36,47 @@ views = Blueprint("views", __name__)
 @login_required  # can't get to home page unless logged in
 def home():
     new_note = False
-    actual_quote = ""
+    quote = ""
     # when new note button is clicked
-    print(request.form.get("new_note"))
     if request.method == "POST":
         # new note button clicked
         if request.form.get("new_note") == "note_created":
             new_note = True
             # get quote from quote API
             quote = get_quote()
-            author = quote["author"]
-            category = quote["category"]
-            actual_quote = quote["quote"]
             # display note form along with quote
         # new note added and return to home page
+        else:
+            note = request.form.get("note")
+            quote_text = request.form.get("quote_text")
+            quote_author = request.form.get("quote_author")
+            quote_category = request.form.get("quote_category")
 
-    return render_template(
-        "home.html", n=new_note, user=current_user, quote=actual_quote
-    )
+            if len(note) < 100:
+                flash("Note needs to be at least 100 characters long", category="error")
+            else:
+                # add to Note db
+                new_note_entry = Note(
+                    notes=note,
+                    quote=quote_text,
+                    quote_author=quote_author,
+                    quote_category=quote_category,
+                    user_id=current_user.id,
+                )
+                db.session.add(new_note_entry)
+                db.session.commit()
+                flash("Note added!", category="success")
+
+    return render_template("home.html", n=new_note, user=current_user, q=quote)
+
+
+@views.route("/delete-note", methods=["POST"])
+def delete_note():
+    note = json.loads(request.data)
+    noteId = note["noteId"]
+    note = Note.query.get(noteId)  # look for note that has this note id
+    if note:
+        if note.user_id == current_user.id:  # if note is user's note
+            db.session.delete(note)
+            db.session.commit()
+    return jsonify({})  # must return something
