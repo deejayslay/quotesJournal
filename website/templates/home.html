@@ -1,3 +1,33 @@
-{% extends "base.html" %} {% block content %}
-<h1>This is the home page</h1>
-{% endblock %}
+{% extends "base.html" %} {% block content %} {% if not n %}
+<h1>Notes</h1>
+<ul class="list-group list-group-flush" , id="notes">
+  {% for note in user.notes %}
+  <li class="list-group-item">{{ note.data }} {{note.date}}</li>
+  {% endfor %}
+</ul>
+<br />
+<form method="POST">
+  <div align="center">
+    <button
+      type="submit"
+      class="btn btn-primary"
+      name="new_note"
+      value="note_created"
+    >
+      New Note
+    </button>
+  </div>
+</form>
+{% endif %}
+<br />
+{% if n %}
+<h1>New Note</h1>
+<form method="POST">
+  <p>{{ quote }}</p>
+  <textarea name="note" id="note" class="form-control"></textarea>
+  <br />
+  <div align="center">
+    <button type="submit" class="btn btn-primary">Add Note</button>
+  </div>
+</form>
+{% endif %} {% endblock %}
