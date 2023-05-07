@@ -20,6 +20,7 @@ class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     notes = db.Column(db.String(15000))
     date = db.Column(db.DateTime(timezone=True), default=func.now())
+    # quote info
     quote = db.Column(db.String(500))
     quote_author = db.Column(db.String(100))
     quote_category = db.Column(db.String(100))

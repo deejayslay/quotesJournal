@@ -4,9 +4,10 @@
   {% for note in user.notes %}
   <li class="list-group-item">
     <div>
-      {{ note.quote }} {{ note.quote_author }} {{ note.quote_category }}
+      "{{ note.quote }}" - {{ note.quote_author }}, Category: {{
+      note.quote_category }}
     </div>
-    <div>{{ note.date }}</div>
+    <div>Date: {{ note.date }}</div>
     <button type="button" class="close" onClick="deleteNote({{ note.id }})">
       <span aria-hidden="true">&times;</span>
     </button>

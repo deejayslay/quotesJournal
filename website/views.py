@@ -54,6 +54,7 @@ def home():
 
             if len(note) < 100:
                 flash("Note needs to be at least 100 characters long", category="error")
+                new_note = True  # new_note still hasn't been added
             else:
                 # add to Note db
                 new_note_entry = Note(
