@@ -36,7 +36,9 @@ views = Blueprint("views", __name__)
 @login_required  # can't get to home page unless logged in
 def home():
     new_note = False
-    quote = ""
+    quote_text = ""
+    quote_category = ""
+    quote_author = ""
     # when new note button is clicked
     if request.method == "POST":
         # new note button clicked
@@ -44,6 +46,9 @@ def home():
             new_note = True
             # get quote from quote API
             quote = get_quote()
+            quote_text = quote['quote']
+            quote_author = quote['author']
+            quote_category = quote['category']
             # display note form along with quote
         # new note added and return to home page
         else:
@@ -54,7 +59,7 @@ def home():
 
             if len(note) < 100:
                 flash("Note needs to be at least 100 characters long", category="error")
-                new_note = True  # new_note still hasn't been added
+                new_note = True  # new_note still hasn't been saved
             else:
                 # add to Note db
                 new_note_entry = Note(
@@ -68,7 +73,7 @@ def home():
                 db.session.commit()
                 flash("Note added!", category="success")
 
-    return render_template("home.html", n=new_note, user=current_user, q=quote)
+    return render_template("home.html", n=new_note, user=current_user, qt=quote_text, qa=quote_author, qc=quote_category)
 
 
 @views.route("/delete-note", methods=["POST"])

@@ -3,13 +3,25 @@
 }
 
 .top-navbar {
-  background-color: gray;
+  background-color: turquoise;
+  padding: 10px;
   display: flex;
 }
 
+.main-heading {
+  margin-left: auto;
+  margin-top: auto;
+}
+
 div.top-navbar a {
-  color: white;
+  color: black;
   padding: 15px;
   font-size: 25px;
   text-decoration: none;
+}
+
+.container {
+  background-color: turquoise;
+  margin-top: 20px;
+  padding: 15px;
 }

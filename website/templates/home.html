@@ -1,5 +1,7 @@
-{% extends "base.html" %} {% block content %} {% if not n %}
-<h1>Notes</h1>
+{% extends "base.html" %} {% block custom_css %}
+<link rel="stylesheet" href="../static/home.css" />
+{% endblock %} {% block content %} {% if not n %}
+<h1 class="notes-header">Notes</h1>
 <ul class="list-group list-group-flush" , id="notes">
   {% for note in user.notes %}
   <li class="list-group-item">
@@ -30,13 +32,13 @@
 {% endif %}
 <br />
 {% if n %}
-<h1>New Note</h1>
+<h2>New Note</h2>
 <form method="POST">
-  <p>"{{ q["quote"] }}" - {{ q["author"] }}</p>
-  <p>Category: {{ q["category"] }}</p>
-  <input type="hidden" name="quote_text" value="{{ q['quote'] }}" />
-  <input type="hidden" name="quote_author" value="{{ q['author'] }}" />
-  <input type="hidden" name="quote_category" value="{{ q['category'] }}" />
+  <p>"{{ qt }}" - {{ qa }}</p>
+  <p>Category: {{ qc }}</p>
+  <input type="hidden" name="quote_text" value="{{ qt }}" />
+  <input type="hidden" name="quote_author" value="{{ qa }}" />
+  <input type="hidden" name="quote_category" value="{{ qc }}" />
   <textarea
     name="note"
     id="note"
