@@ -1,13 +1,19 @@
 {% extends "base.html" %} {% block custom_css %}
 <link rel="stylesheet" href="../static/home.css" />
-{% endblock %} {% block content %} {% if not n %}
+{% endblock %} {% block content %} {% if not v %} {% if not n %}
 <h1 class="notes-header">Notes</h1>
 <ul class="list-group list-group-flush" , id="notes">
   {% for note in user.notes %}
   <li class="list-group-item">
     <div>
-      "{{ note.quote }}" - {{ note.quote_author }}, Category: {{
-      note.quote_category }}
+      <form method="POST">
+        <input type="hidden" name="note_id" value="{{ note.id }}" />
+        <button type="submit" class="view-button" name="view_note" value="yes">
+          "{{ note.quote }}"
+        </button>
+      </form>
+
+      - {{ note.quote_author }}, Category: {{ note.quote_category }}
     </div>
     <div>Date: {{ note.date }}</div>
     <button type="button" class="close" onClick="deleteNote({{ note.id }})">
@@ -51,4 +57,12 @@
     <button type="submit" class="btn btn-primary">Add Note</button>
   </div>
 </form>
+{% endif %} {% else %}
+<div><b>Quote:</b> "{{ no.quote }}" - {{ no.quote_author }}</div>
+<br />
+<div><b>Category:</b> {{ no.quote_category }}</div>
+<br />
+<div><b>Date:</b> {{ no.date }}</div>
+<br />
+<div><b>Notes:</b> {{ no.notes }}</div>
 {% endif %} {% endblock %}

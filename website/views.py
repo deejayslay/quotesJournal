@@ -36,9 +36,11 @@ views = Blueprint("views", __name__)
 @login_required  # can't get to home page unless logged in
 def home():
     new_note = False
+    view_note = False
     quote_text = ""
     quote_category = ""
     quote_author = ""
+    note_obj = None
     # when new note button is clicked
     if request.method == "POST":
         # new note button clicked
@@ -46,10 +48,16 @@ def home():
             new_note = True
             # get quote from quote API
             quote = get_quote()
-            quote_text = quote['quote']
-            quote_author = quote['author']
-            quote_category = quote['category']
+            quote_text = quote["quote"]
+            quote_author = quote["author"]
+            quote_category = quote["category"]
             # display note form along with quote
+        # when note is viewed
+        elif request.form.get("view_note") == "yes":
+            view_note = True
+            note_id = request.form.get("note_id")
+            note_obj = Note.query.get(note_id)
+
         # new note added and return to home page
         else:
             note = request.form.get("note")
@@ -73,7 +81,16 @@ def home():
                 db.session.commit()
                 flash("Note added!", category="success")
 
-    return render_template("home.html", n=new_note, user=current_user, qt=quote_text, qa=quote_author, qc=quote_category)
+    return render_template(
+        "home.html",
+        n=new_note,
+        v=view_note,
+        user=current_user,
+        no=note_obj,
+        qt=quote_text,
+        qa=quote_author,
+        qc=quote_category,
+    )
 
 
 @views.route("/delete-note", methods=["POST"])
@@ -86,3 +103,22 @@ def delete_note():
             db.session.delete(note)
             db.session.commit()
     return jsonify({})  # must return something
+
+
+@views.route("/view-note", methods=["POST"])
+def view_note():
+    note = json.loads(request.data)
+    noteId = note["noteId"]
+    note = Note.query.get(noteId)  # look for note that has this note id
+    if note:
+        if note.user_id == current_user.id:  # if note is user's note
+            print(note.quote)
+        note = {
+            "notes": note.notes,
+            "date": note.date,
+            "quote": note.quote,
+            "author": note.quote_author,
+            "category": note.quote_category,
+        }
+    print("monayyyy")
+    return render_template("view_note.html", user=current_user)

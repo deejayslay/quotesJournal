@@ -57,10 +57,6 @@ def signup():
         user = User.query.filter_by(email=email).first()
         if user:
             flash("Email already associated with account.", category="error")
-        elif email.count("@") != 1:
-            flash("Invalid Email", category="error")
-        elif len(email) < 10:
-            flash("Invalid Email", category="error")
         elif len(first_name) < 2:
             flash("First Name must be at least 2 characters.", category="error")
         elif len(password1) < 5:
